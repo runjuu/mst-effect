@@ -9,6 +9,10 @@ export function action<P extends any[]>(fn: (...params: P) => void, ...params: P
   return { [Identity]: () => fn(...params) }
 }
 
+export function noop(..._params: any[]): EffectAction {
+  return action(() => {})
+}
+
 export function effect<P = void>(
   self: Instance<IAnyModelType>,
   fn: EffectFactory<P>,

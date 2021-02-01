@@ -55,7 +55,7 @@ function runActions(actions: ValidEffectActions) {
   }
 }
 
-function logAngIgnoreError(factory: Function) {
+function logAngIgnoreError(factory: unknown) {
   return catchError((err, caught) => {
     /* eslint-disable no-console */
     console.group('[mst-effect]: error')

@@ -1,9 +1,13 @@
 import { Observable, Subject } from 'rxjs'
 import { tap, catchError } from 'rxjs/operators'
-import { IAnyModelType, Instance, addDisposer } from 'mobx-state-tree'
 
-import type { PayloadFunc, EffectFactory, ValidEffectActions } from './types'
-import { HANDLE_MST_EFFECT_ACTIONS } from './const'
+import type { PayloadFunc, EffectFactory, ValidEffectActions, EffectAction } from '../types'
+import { IAnyModelType, Instance, addDisposer } from '../mst'
+import { EFFECT_ACTIONS_HANDLER, EFFECT_ACTION_IDENTITY } from '../const'
+
+export function action<P extends any[]>(fn: (...params: P) => void, ...params: P): EffectAction {
+  return { [EFFECT_ACTION_IDENTITY]: () => fn(...params) }
+}
 
 export function effect(
   self: Instance<IAnyModelType>,
@@ -22,8 +26,8 @@ export function effect(
   const subscription = effect$
     .pipe(
       tap((actions) => {
-        if (self[HANDLE_MST_EFFECT_ACTIONS]) {
-          self[HANDLE_MST_EFFECT_ACTIONS](actions)
+        if (self[EFFECT_ACTIONS_HANDLER]) {
+          self[EFFECT_ACTIONS_HANDLER](actions)
         } else {
           console.warn(
             `[mst-effect]: Make sure the 'types' is imported from 'mst-effect' instead of 'mobx-state-tree'`,

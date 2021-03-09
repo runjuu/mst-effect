@@ -1,3 +1,3 @@
-export const Identity: unique symbol = Symbol.for('mst-effect-identity')
+export const EFFECT_ACTION_IDENTITY = 'MST_EFFECT_ACTION_IDENTITY'
 
-export const HANDLE_MST_EFFECT_ACTIONS = 'HANDLE_MST_EFFECT_ACTIONS'
+export const EFFECT_ACTIONS_HANDLER = 'MST_EFFECT_ACTIONS_HANDLER'

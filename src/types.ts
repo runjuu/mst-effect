@@ -1,6 +1,6 @@
 import type { Observable } from 'rxjs'
 
-import type { Identity } from './const'
+import type { EFFECT_ACTION_IDENTITY } from './const'
 
 export type IsAny<T> = 0 extends 1 & T ? true : false // https://stackoverflow.com/questions/55541275/typescript-check-for-the-any-type
 
@@ -16,7 +16,7 @@ export type PayloadFunc<Payload, ReturnType> = IsEmptyPayload<Payload> extends t
   ? () => ReturnType
   : (payload: Payload) => ReturnType
 
-export type EffectAction = { [Identity]: () => void }
+export type EffectAction = { [EFFECT_ACTION_IDENTITY]: () => void }
 
 export type ValidEffectActions = null | EffectAction | (EffectAction | null)[]
 

@@ -1,3 +1,5 @@
+export * from './mst-types-override'
+
 export {
   IModelType,
   IAnyModelType,

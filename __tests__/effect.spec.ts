@@ -1,7 +1,6 @@
 import { map, startWith, endWith } from 'rxjs/operators'
-import { types, destroy } from 'mobx-state-tree'
 
-import { effect, action } from '../src'
+import { effect, action, types, destroy } from '../src'
 
 describe('effect', () => {
   it(`should execute the action that Observable emit`, () => {
@@ -122,5 +121,25 @@ describe('effect', () => {
 
     model.throwErr(false)
     expect(spy.mock.calls).toEqual([[]])
+  })
+
+  it(`should able to update model value inside action`, () => {
+    const Model = types.model({ value: types.string }).actions((self) => ({
+      setValue: effect<string>(self, (payload$) =>
+        payload$.pipe(
+          map((newValue) =>
+            action(() => {
+              self.value = newValue
+            }),
+          ),
+        ),
+      ),
+    }))
+
+    const model = Model.create({ value: '' })
+
+    model.setValue('123')
+
+    expect(model.value).toBe('123')
   })
 })

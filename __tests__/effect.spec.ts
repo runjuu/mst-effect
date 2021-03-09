@@ -1,3 +1,4 @@
+import { Subject } from 'rxjs'
 import { map, startWith, endWith } from 'rxjs/operators'
 
 import { effect, action, types, destroy } from '../src'
@@ -141,5 +142,19 @@ describe('effect', () => {
     model.setValue('123')
 
     expect(model.value).toBe('123')
+  })
+
+  it(`should able to use Observable directly`, () => {
+    const subject = new Subject<number>()
+    const spy = jest.fn()
+    const Model = types.model({ value: types.string }).actions((self) => ({
+      _effect: effect(self, subject.pipe(map((num) => action(spy, num)))),
+    }))
+
+    Model.create({ value: '' })
+
+    subject.next(123)
+
+    expect(spy.mock.calls).toEqual([[123]])
   })
 })

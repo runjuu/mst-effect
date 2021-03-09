@@ -1,20 +1,24 @@
-import { Subject } from 'rxjs'
+import { Observable, Subject } from 'rxjs'
 import { tap, catchError } from 'rxjs/operators'
 import { IAnyModelType, Instance, addDisposer } from 'mobx-state-tree'
 
-import type { PayloadFunc, EffectFactory } from './types'
+import type { PayloadFunc, EffectFactory, ValidEffectActions } from './types'
 import { HANDLE_MST_EFFECT_ACTIONS } from './const'
 
+export function effect(
+  self: Instance<IAnyModelType>,
+  fn: Observable<ValidEffectActions>,
+): PayloadFunc<never, void>
 export function effect<P = void>(
   self: Instance<IAnyModelType>,
   fn: EffectFactory<P>,
 ): PayloadFunc<P, void>
 export function effect(
   self: Instance<IAnyModelType>,
-  fn: EffectFactory<any>,
+  fn: EffectFactory<any> | Observable<ValidEffectActions>,
 ): (payload: any) => void {
   const payloadSource = new Subject()
-  const effect$ = fn(payloadSource.asObservable())
+  const effect$ = typeof fn === 'function' ? fn(payloadSource.asObservable()) : fn
   const subscription = effect$
     .pipe(
       tap((actions) => {

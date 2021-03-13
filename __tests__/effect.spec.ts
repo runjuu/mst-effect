@@ -1,7 +1,8 @@
 import { Subject } from 'rxjs'
 import { map, startWith, endWith } from 'rxjs/operators'
+import { types, destroy } from 'mobx-state-tree'
 
-import { effect, action, types, destroy } from '../src'
+import { effect, action } from '../src'
 
 describe('effect', () => {
   it(`should execute the action that Observable emit`, () => {

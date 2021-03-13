@@ -1,17 +1,18 @@
-import { addDisposer, IAnyModelType, Instance } from 'mobx-state-tree'
+import { addDisposer } from 'mobx-state-tree'
 import { Observable, Subject } from 'rxjs'
 import { tap, catchError } from 'rxjs/operators'
 
-import type { PayloadFunc, EffectFactory, ValidEffectActions } from '../types'
+import type { PayloadFunc, AnyInstance } from '../types'
+import { runActions, ValidEffectActions } from './action'
 
-import { runActions } from './action'
+export type EffectFactory<P> = (payload$: Observable<P>) => Observable<ValidEffectActions>
 
-export function effect(self: Instance<IAnyModelType>, fn: Observable<ValidEffectActions>): never
+export function effect(self: AnyInstance, fn: Observable<ValidEffectActions>): never
 
-export function effect<P>(self: Instance<IAnyModelType>, fn: EffectFactory<P>): PayloadFunc<P, void>
+export function effect<P>(self: AnyInstance, fn: EffectFactory<P>): PayloadFunc<P, void>
 
 export function effect(
-  self: Instance<IAnyModelType>,
+  self: AnyInstance,
   fn: EffectFactory<any> | Observable<ValidEffectActions>,
 ): (payload: any) => void {
   const payloadSource = new Subject()

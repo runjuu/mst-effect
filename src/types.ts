@@ -1,6 +1,4 @@
-import type { Observable } from 'rxjs'
-
-import type { EFFECT_ACTION_IDENTITY } from './const'
+import type { IAnyModelType, Instance } from 'mobx-state-tree'
 
 export type IsAny<T> = 0 extends 1 & T ? true : false // https://stackoverflow.com/questions/55541275/typescript-check-for-the-any-type
 
@@ -16,8 +14,4 @@ export type PayloadFunc<Payload, ReturnType> = IsEmptyPayload<Payload> extends t
   ? () => ReturnType
   : (payload: Payload) => ReturnType
 
-export type EffectAction = { [EFFECT_ACTION_IDENTITY]: () => void }
-
-export type ValidEffectActions = null | EffectAction | (EffectAction | null)[]
-
-export type EffectFactory<P> = (payload$: Observable<P>) => Observable<ValidEffectActions>
+export type AnyInstance = Instance<IAnyModelType>

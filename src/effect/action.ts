@@ -1,7 +1,10 @@
 import { runInAction } from 'mobx'
 
-import { EffectAction, ValidEffectActions } from '../types'
 import { EFFECT_ACTION_IDENTITY } from '../const'
+
+export type EffectAction = { [EFFECT_ACTION_IDENTITY]: () => void }
+
+export type ValidEffectActions = null | EffectAction | (EffectAction | null)[]
 
 export function action<P extends any[]>(fn: (...params: P) => void, ...params: P): EffectAction {
   return { [EFFECT_ACTION_IDENTITY]: () => fn(...params) }

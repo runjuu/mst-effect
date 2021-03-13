@@ -6,15 +6,9 @@ import type { PayloadFunc, EffectFactory, ValidEffectActions } from '../types'
 
 import { runActions } from './action'
 
-export function effect(
-  self: Instance<IAnyModelType>,
-  fn: Observable<ValidEffectActions>,
-): PayloadFunc<never, void>
+export function effect(self: Instance<IAnyModelType>, fn: Observable<ValidEffectActions>): never
 
-export function effect<P = void>(
-  self: Instance<IAnyModelType>,
-  fn: EffectFactory<P>,
-): PayloadFunc<P, void>
+export function effect<P>(self: Instance<IAnyModelType>, fn: EffectFactory<P>): PayloadFunc<P, void>
 
 export function effect(
   self: Instance<IAnyModelType>,

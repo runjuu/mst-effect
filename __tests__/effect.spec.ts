@@ -1,8 +1,9 @@
-import { Subject } from 'rxjs'
-import { map, startWith, endWith } from 'rxjs/operators'
-import { types, destroy } from 'mobx-state-tree'
+import { timer, Subject } from 'rxjs'
+import { map, startWith, endWith, switchMap } from 'rxjs/operators'
 
-import { effect, action } from '../src'
+import { types, effect, action, destroy } from '../src'
+
+jest.useFakeTimers()
 
 describe('effect', () => {
   it(`should execute the action that Observable emit`, () => {
@@ -129,10 +130,14 @@ describe('effect', () => {
     const Model = types.model({ value: types.string }).actions((self) => ({
       setValue: effect<string>(self, (payload$) =>
         payload$.pipe(
-          map((newValue) =>
-            action(() => {
-              self.value = newValue
-            }),
+          switchMap((newValue) =>
+            timer(1000).pipe(
+              map(() =>
+                action(() => {
+                  self.value = newValue
+                }),
+              ),
+            ),
           ),
         ),
       ),
@@ -141,6 +146,8 @@ describe('effect', () => {
     const model = Model.create({ value: '' })
 
     model.setValue('123')
+
+    jest.advanceTimersByTime(1000)
 
     expect(model.value).toBe('123')
   })

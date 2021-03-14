@@ -1,5 +1,3 @@
-import { runInAction } from 'mobx'
-
 import { EFFECT_ACTION_IDENTITY } from '../const'
 
 export type EffectAction = { [EFFECT_ACTION_IDENTITY]: () => void }
@@ -11,7 +9,7 @@ export function action<P extends any[]>(fn: (...params: P) => void, ...params: P
 }
 
 export function runActions(actions: ValidEffectActions): void {
-  runInAction(() => (Array.isArray(actions) ? actions : [actions]).forEach(runAction))
+  ;(Array.isArray(actions) ? actions : [actions]).forEach(runAction)
 }
 
 function runAction(action: any): void {

@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`reaction$ should able to specify reaction's options 1`] = `
+Array [
+  Array [
+    Object {
+      "current": 0,
+      "prev": undefined,
+    },
+  ],
+]
+`;
+
+exports[`reaction$ should emit data anytime it observes changes 1`] = `
+Array [
+  Array [
+    Object {
+      "current": 1,
+      "prev": 0,
+    },
+  ],
+  Array [
+    Object {
+      "current": 2,
+      "prev": 1,
+    },
+  ],
+  Array [
+    Object {
+      "current": 3,
+      "prev": 2,
+    },
+  ],
+]
+`;

@@ -1,0 +1,39 @@
+name: test
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+
+      - name: Install dependencies
+        uses: borales/actions-yarn@v2.0.0
+        with:
+          cmd: install
+
+      - name: Build packages
+        uses: borales/actions-yarn@v2.0.0
+        with:
+          cmd: run build
+
+      - name: Lint packages
+        uses: borales/actions-yarn@v2.0.0
+        with:
+          cmd: run lint
+
+      - name: Test packages
+        uses: borales/actions-yarn@v2.0.0
+        with:
+          cmd: run test --ci --forceExit --detectOpenHandles

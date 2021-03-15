@@ -5,7 +5,7 @@ import { AnyInstance, PayloadFunc } from '../types'
 
 export type SignalFactory<P, R> = (payload$: Observable<P>) => Observable<R>
 
-export type SignalResult<P, R> = [PayloadFunc<P, void>, Observable<R>]
+export type SignalResult<P, R> = [Observable<R>, PayloadFunc<P, void>]
 
 export function signal<P>(self: AnyInstance): SignalResult<P, P>
 export function signal<P, R>(self: AnyInstance, fn: SignalFactory<P, R>): SignalResult<P, R>
@@ -15,5 +15,5 @@ export function signal<P, R>(self: AnyInstance, fn?: SignalFactory<P, R>): Signa
 
   addDisposer(self, () => payloadSource.complete())
 
-  return [(payload) => payloadSource.next(payload), signal$] as SignalResult<P, R>
+  return [signal$, (payload) => payloadSource.next(payload)] as SignalResult<P, R>
 }

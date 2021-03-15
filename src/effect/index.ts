@@ -1,2 +1,2 @@
 export * from './effect'
-export { action } from './action'
+export { action, ValidEffectActions, EffectAction } from './action'

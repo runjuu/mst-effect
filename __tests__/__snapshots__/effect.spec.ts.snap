@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`effect action should warning if 'types' is not imported from 'mst-effect' 1`] = `
+Array [
+  Array [
+    "[mst-effect]: Make sure the 'types' is imported from 'mst-effect' instead of 'mobx-state-tree'",
+  ],
+]
+`;
+
+exports[`effect action should warning if action invalid 1`] = `
+Array [
+  Array [
+    "[mst-effect]: hi! is not a valid EffectActions",
+  ],
+]
+`;

@@ -16,18 +16,18 @@ export function effect(
   self: AnyInstance,
   fn: EffectFactory<any> | Observable<ValidEffectActions>,
 ): (payload: any) => void {
+  if (!self[EFFECT_ACTIONS_HANDLER]) {
+    console.warn(
+      `[mst-effect]: Make sure the 'types' is imported from 'mst-effect' instead of 'mobx-state-tree'`,
+    )
+  }
+
   const payloadSource = new Subject()
   const effect$ = typeof fn === 'function' ? fn(payloadSource.asObservable()) : fn
   const subscription = effect$
     .pipe(
       tap((actions) => {
-        if (self[EFFECT_ACTIONS_HANDLER]) {
-          self[EFFECT_ACTIONS_HANDLER](actions)
-        } else {
-          console.warn(
-            `[mst-effect]: Make sure the 'types' is imported from 'mst-effect' instead of 'mobx-state-tree'`,
-          )
-        }
+        self[EFFECT_ACTIONS_HANDLER]?.(actions)
       }),
       logAngIgnoreError(fn),
     )

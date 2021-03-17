@@ -128,7 +128,7 @@ function effect(
 export function signal<P, R = P>(
   self: AnyInstance,
   fn?: (payload$: Observable<P>) => Observable<R>,
-): [(payload: P) => void, Observable<R>]
+): [Observable<R>, (payload: P) => void]
 ```
 
 `signal` is an encapsulation of the [`Subject`](https://rxjs-dev.firebaseapp.com/api/index/class/Subject). You can use the second parameter to do some processing of the output data.

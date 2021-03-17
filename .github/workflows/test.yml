@@ -36,4 +36,10 @@ jobs:
       - name: Test packages
         uses: borales/actions-yarn@v2.0.0
         with:
-          cmd: run test --ci --forceExit --detectOpenHandles
+          cmd: run test --ci --forceExit --detectOpenHandles --coverage
+          
+      - name: Coveralls GitHub Action
+        uses: coverallsapp/github-action@v1.1.2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+

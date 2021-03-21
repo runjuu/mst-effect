@@ -1,31 +1,39 @@
-<h1 align="center">mst-effect 💫</h1>
-
-<h4 align="center">
-  Designed to be used with <a href="https://github.com/mobxjs/mobx-state-tree">MobX-State-Tree</a> to compose asynchronous programs using <a href="https://github.com/ReactiveX/rxjs">RxJS</a>.
-</h4>
-
 <p align="center">
-  <a href="https://github.com/runjuu/mst-effect/blob/main/LICENSE">
-    <img height="20" alt="GitHub license" src="https://badgen.net/badge/license/MIT/cyan" />
-  </a>
-  <a href="https://github.com/runjuu/mst-effect/discussions">
-    <img height="20" alt="discussions" src="https://badgen.net/badge/join%20the%20discussion/on%20github/purple?icon=github" />
-  </a>
-  <a href="#contributing">
-    <img height="20" alt="PRs Welcome" src="https://badgen.net/badge/PRs/welcome/green" />
-  </a>
-  <a href="https://www.npmjs.com/package/mst-effect">
-    <img height="20" alt="npm version" src="https://badgen.net/npm/v/mst-effect" />
-  </a>
-  <a href="https://www.npmjs.com/package/mst-effect">
-    <img height="20" alt="types" src="https://badgen.net/npm/types/mst-effect" />
-  </a>
-  <a href="https://bundlephobia.com/result?p=mst-effect">
-    <img height="20" alt="minzipped size" src="https://badgen.net/bundlephobia/minzip/mst-effect" />
+  <a href="https://github.com/Runjuu/mst-effect">
+    <img width="150px" src="https://user-images.githubusercontent.com/12002941/111877518-b2c60900-89de-11eb-8f28-d5fd95897258.png" alt="mst-effect" />
   </a>
 </p>
 
-[Why use RxJS?](http://reactivex.io/intro.html)
+<p align="center">
+  <a href="https://github.com/Runjuu/mst-effect/blob/main/LICENSE">
+    <img src="https://img.shields.io/npm/l/mst-effect?colorA=373737&colorB=0A70E9&style=flat" alt="GitHub license" />
+  </a>
+  <a href="https://www.npmjs.com/package/mst-effect">
+    <img src="https://img.shields.io/npm/v/mst-effect?colorA=373737&colorB=0A70E9&style=flat" alt="NPM version" />
+  </a>
+  <a href="https://bundlephobia.com/result?p=mst-effect">
+    <img src="https://img.shields.io/bundlephobia/min/mst-effect?label=bundle%20size&colorA=373737&colorB=0A70E9&style=flat" alt="Bundle size" />
+  </a>
+  <a href="https://coveralls.io/github/Runjuu/mst-effect?branch=main">
+    <img src="https://img.shields.io/coveralls/github/Runjuu/mst-effect?colorA=373737&colorB=0A70E9&style=flat" alt="Coverage Status" />
+  </a>
+  <a href="https://github.com/Runjuu/mst-effect/discussions">
+    <img src="https://img.shields.io/static/v1?label=chat&message=on%20github%20discussions&colorA=373737&colorB=0A70E9&style=flat" alt="Github discussions" />
+  </a>
+</p>
+
+`mst-effect` is designed to be used with <a href="https://github.com/mobxjs/mobx-state-tree">MobX-State-Tree</a> to create asynchronous actions using <a href="https://github.com/ReactiveX/rxjs">RxJS</a>. In case you haven't used them before:
+
+> `MobX-State-Tree` is a full-featured reactive state management library that can __structure the state model__ super intuitively.<br />
+> `RxJS` is a library for composing asynchronous and event-based programs that provides the best practice to __manage async codes__.
+
+If you are still hesitant about learning `RxJS`, check the examples below and play around with them. I assure you that you'll be amazed by what it can do and how clean the code could be. If you are already using `MobX-State-Tree`, that's awesome! `mst-effect` is 100% compatible with your current project.
+
+## Examples
+- [Fetch data](https://codesandbox.io/s/fetch-data-i9hqb?file=/src/app.tsx)
+- [Handle user input](https://codesandbox.io/s/handle-user-input-ef1pt?file=/src/app.tsx)
+- [Mutually exclusive actions](https://codesandbox.io/s/mutually-exclusive-actions-ylqlf?file=/src/app.tsx)
+- [Back pressure](https://codesandbox.io/s/backpressure-ulu1y?file=/src/app.tsx)
 
 ## Installation
 `mst-effect` has peer dependencies of [mobx](https://www.npmjs.com/package/mobx), [mobx-state-tree](https://www.npmjs.com/package/mobx-state-tree) and [rxjs](https://www.npmjs.com/package/rxjs), which will have to be installed as well.
@@ -41,11 +49,6 @@ yarn add mst-effect
 ```bash
 npm install mst-effect --save
 ```
-
-## Examples
-- [Fetch data](https://codesandbox.io/s/fetch-data-i9hqb?file=/src/app.tsx)
-- [Handle user input](https://codesandbox.io/s/handle-user-input-ef1pt?file=/src/app.tsx)
-- [Mutually exclusive actions](https://codesandbox.io/s/mutually-exclusive-actions-ylqlf?file=/src/app.tsx)
 
 ## Basics
 __`effect`__ is the core method of `mst-effect`. It can automatically manage subscriptions and execute the emitted actions. For example:

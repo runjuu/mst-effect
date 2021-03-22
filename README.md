@@ -17,8 +17,8 @@
   <a href="https://coveralls.io/github/Runjuu/mst-effect?branch=main">
     <img src="https://img.shields.io/coveralls/github/Runjuu/mst-effect?colorA=373737&colorB=0A70E9&style=flat" alt="Coverage Status" />
   </a>
-  <a href="https://github.com/Runjuu/mst-effect/discussions">
-    <img src="https://img.shields.io/static/v1?label=chat&message=on%20github%20discussions&colorA=373737&colorB=0A70E9&style=flat" alt="Github discussions" />
+  <a href="https://discord.gg/GguVg7JxNb">
+    <img src="https://img.shields.io/discord/822723953465360435?style=flat&colorA=373737&colorB=0A70E9&label=discord&logo=discord&logoColor=FFF" alt="Discord" />
   </a>
 </p>
 
@@ -27,10 +27,13 @@
 > `MobX-State-Tree` is a full-featured reactive state management library that can __structure the state model__ super intuitively.<br />
 > `RxJS` is a library for composing asynchronous and event-based programs that provides the best practice to __manage async codes__.
 
-If you are still hesitant about learning `RxJS`, check the examples below and play around with them. I assure you that you'll be amazed by what it can do and how clean the code could be. If you are already using `MobX-State-Tree`, that's awesome! `mst-effect` is 100% compatible with your current project.
+If you are still hesitant about learning `RxJS`, check the examples below and play around with them. I assure you that you'll be amazed by what it can do and how clean the code could be. 
+
+Already using `MobX-State-Tree`? Awesome! `mst-effect` is 100% compatible with your current project.
 
 ## Examples
 - [Fetch data](https://codesandbox.io/s/fetch-data-i9hqb?file=/src/app.tsx)
+- [Fetch with token](https://codesandbox.io/s/fetch-with-token-rbveh?file=/src/app.tsx)
 - [Handle user input](https://codesandbox.io/s/handle-user-input-ef1pt?file=/src/app.tsx)
 - [Mutually exclusive actions](https://codesandbox.io/s/mutually-exclusive-actions-ylqlf?file=/src/app.tsx)
 - [Back pressure](https://codesandbox.io/s/backpressure-ulu1y?file=/src/app.tsx)

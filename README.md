@@ -105,7 +105,7 @@ function action(callback, ...params): EffectAction {
 ##### When using a factory function
 
 ```ts
-type ValidEffectActions = null | EffectAction | (null | EffectAction)[] // `null` for doing nothing
+type ValidEffectActions = EffectAction | EffectAction[]
 
 function effect<P>(
   self: AnyInstance,

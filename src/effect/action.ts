@@ -2,11 +2,13 @@ import { EFFECT_ACTION_IDENTITY } from '../const'
 
 export type EffectAction = { [EFFECT_ACTION_IDENTITY]: () => void }
 
-export type ValidEffectActions = null | EffectAction | (EffectAction | null)[]
+export type ValidEffectActions = EffectAction | EffectAction[]
 
 export function action<P extends any[]>(fn: (...params: P) => void, ...params: P): EffectAction {
   return { [EFFECT_ACTION_IDENTITY]: () => fn(...params) }
 }
+
+export const NOOP = action(() => {})
 
 export function runActions(actions: ValidEffectActions): void {
   ;(Array.isArray(actions) ? actions : [actions]).forEach(runAction)
@@ -15,8 +17,8 @@ export function runActions(actions: ValidEffectActions): void {
 function runAction(action: any): void {
   if (isValidAction(action)) {
     action[EFFECT_ACTION_IDENTITY]()
-  } else if (action !== null) {
-    console.warn(`[mst-effect]: ${action} is not a valid EffectActions`)
+  } else {
+    console.warn(`[mst-effect]: ${String(action)} is not a valid EffectActions`)
   }
 }
 

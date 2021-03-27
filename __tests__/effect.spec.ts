@@ -2,7 +2,7 @@ import { timer, Subject, Observable } from 'rxjs'
 import { map, startWith, endWith, switchMap } from 'rxjs/operators'
 import { types as mstTypes } from 'mobx-state-tree'
 
-import { types, effect, action, destroy, ValidEffectActions } from '../src'
+import { types, effect, action, destroy, NOOP, ValidEffectActions } from '../src'
 
 jest.useFakeTimers()
 
@@ -23,7 +23,7 @@ describe('effect', () => {
       expect(spy.mock.calls).toEqual([['hi!']])
     })
 
-    it(`should accept 'null' as valid action`, () => {
+    it(`should accept 'NOOP' as valid action`, () => {
       const spy = jest.fn()
       const Model = types.model().actions((self) => ({
         run: effect<ValidEffectActions>(self, (payload$) => payload$),
@@ -31,7 +31,7 @@ describe('effect', () => {
 
       const model = Model.create()
 
-      model.run(null)
+      model.run(NOOP)
       model.run(action(spy))
       expect(spy.mock.calls).toEqual([[]])
     })
@@ -52,11 +52,11 @@ describe('effect', () => {
       expect(spy.mock.calls).toEqual([[0], [1], [2]])
     })
 
-    it(`should ignore 'null' inside action array`, () => {
+    it(`should ignore 'NOOP' inside action array`, () => {
       const spy = jest.fn()
       const Model = types.model().actions((self) => ({
         log: effect<string>(self, (payload$) =>
-          payload$.pipe(map((message) => [null, action(spy, message), null])),
+          payload$.pipe(map((message) => [NOOP, action(spy, message), NOOP])),
         ),
       }))
 
@@ -95,8 +95,20 @@ describe('effect', () => {
       }))
 
       const model = Model.create()
+      const invalidActions = [
+        'string',
+        123,
+        true,
+        false,
+        undefined,
+        null,
+        Symbol('invalid action'),
+        {},
+        function invalidAction() {},
+      ]
 
-      model.emit('hi!')
+      invalidActions.forEach(model.emit)
+      expect(spy.mock.calls.length).toBe(invalidActions.length)
       expect(spy.mock.calls).toMatchSnapshot()
       spy.mockRestore()
     })

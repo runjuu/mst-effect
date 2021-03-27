@@ -1,6 +1,6 @@
 {
   "name": "mst-effect",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Designed to be used with MobX-State-Tree to compose asynchronous programs using RxJS.",
   "license": "MIT",
   "author": "Runjuu",

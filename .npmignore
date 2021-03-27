@@ -27,4 +27,3 @@ composer.lock
 node_modules
 *.log
 /coverage
-__tests__

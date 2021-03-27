@@ -1,10 +1,8 @@
 import { timer, Subject, Observable } from 'rxjs'
-import { map, startWith, endWith, switchMap } from 'rxjs/operators'
+import { map, startWith, endWith, switchMap, debounceTime } from 'rxjs/operators'
 import { types as mstTypes } from 'mobx-state-tree'
 
 import { types, effect, action, destroy, NOOP, ValidEffectActions } from '../src'
-
-jest.useFakeTimers()
 
 describe('effect', () => {
   describe(`action`, () => {
@@ -67,6 +65,7 @@ describe('effect', () => {
     })
 
     it(`should able to modify model inside action`, () => {
+      jest.useFakeTimers()
       const Model = types.model({ value: types.string }).actions((self) => ({
         setValue: effect<string>(self, (payload$) => {
           function updateValue(value: string) {
@@ -86,6 +85,7 @@ describe('effect', () => {
       jest.advanceTimersByTime(1000)
 
       expect(model.value).toBe('123')
+      jest.useRealTimers()
     })
 
     it(`should warning if action invalid`, () => {
@@ -157,6 +157,95 @@ describe('effect', () => {
       const model = Model.create()
       destroy(model)
       expect(spy).toBeCalledTimes(1)
+    })
+  })
+
+  describe(`dispatch function return value`, () => {
+    it(`should be a Promise`, () => {
+      const Model = types.model().actions((self) => ({
+        sendMsg: effect<string, string>(self, (payload$, resolve) =>
+          payload$.pipe(map((message) => action(resolve, message))),
+        ),
+      }))
+
+      const model = Model.create()
+      expect(model.sendMsg('hi!')).toBeInstanceOf(Promise)
+    })
+
+    it(`should be resolved when trigger 'resolve'`, async () => {
+      const Model = types.model().actions((self) => ({
+        sendMsg: effect<string, string>(self, (payload$, resolve) =>
+          payload$.pipe(map((message) => action(resolve, `message: ${message}`))),
+        ),
+      }))
+
+      const model = Model.create()
+      const msg = await model.sendMsg('hi!')
+      expect(msg).toBe(`message: hi!`)
+    })
+
+    it(`should isolate resolved value when dispatch multi-times`, async () => {
+      const Model = types.model().actions((self) => ({
+        sendMsg: effect<string, string>(self, (payload$, resolve) =>
+          payload$.pipe(map((message) => action(resolve, message))),
+        ),
+      }))
+
+      const model = Model.create()
+
+      const a = model.sendMsg('a')
+      const b = model.sendMsg('b')
+      const c = model.sendMsg('c')
+      const result = await Promise.all([a, b, c])
+      expect(result).toEqual(['a', 'b', 'c'])
+    })
+
+    it(`should resolve all previous result when trigger 'resolve'`, async () => {
+      const Model = types.model().actions((self) => ({
+        sendMsg: effect<string, string>(self, (payload$, resolve) =>
+          payload$.pipe(
+            debounceTime(10),
+            map((message) => action(resolve, message)),
+          ),
+        ),
+      }))
+
+      const model = Model.create()
+
+      const a = model.sendMsg('a')
+      const b = model.sendMsg('b')
+      const c = model.sendMsg('c')
+      const result = await Promise.all([a, b, c])
+      expect(result).toEqual(['c', 'c', 'c'])
+    })
+
+    it(`should resolve with undefined if did not trigger 'resolve' but the model was destroyed`, async () => {
+      const Model = types.model().actions((self) => ({
+        sendMsg: effect<string, string>(self, (payload$) => payload$.pipe(map(() => NOOP))),
+      }))
+
+      const model = Model.create()
+      const promise = model.sendMsg('a')
+
+      destroy(model)
+      expect(await promise).toBeUndefined()
+    })
+
+    it(`should able to use 'endWith' to provide default value`, async () => {
+      const Model = types.model().actions((self) => ({
+        sendMsg: effect<void, string>(self, (payload$, resolve) =>
+          payload$.pipe(
+            map(() => NOOP),
+            endWith(action(resolve, 'end value')),
+          ),
+        ),
+      }))
+
+      const model = Model.create()
+      const promise = model.sendMsg()
+
+      destroy(model)
+      expect(await promise).toBe('end value')
     })
   })
 

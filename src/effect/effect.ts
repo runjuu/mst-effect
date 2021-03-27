@@ -8,9 +8,10 @@ import { EFFECT_ACTIONS_HANDLER } from '../const'
 
 export type EffectFactory<P> = (payload$: Observable<P>) => Observable<ValidEffectActions>
 
-export function effect(self: AnyInstance, fn: Observable<ValidEffectActions>): never
-
-export function effect<P>(self: AnyInstance, fn: EffectFactory<P>): PayloadFunc<P, void>
+export function effect<P>(
+  self: AnyInstance,
+  fn: EffectFactory<P> | Observable<ValidEffectActions>,
+): PayloadFunc<P, void>
 
 export function effect(
   self: AnyInstance,

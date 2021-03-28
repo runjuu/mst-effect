@@ -37,7 +37,7 @@
     "lint:eslint": "eslint . --ext .ts,.tsx --fix --max-warnings 0",
     "lint:tsc": "tsc -p tsconfig.json --noEmit --composite false",
     "prepare": "husky install",
-    "prepublish": "run-s build",
+    "prepublish": "run-s lint test build",
     "test": "jest"
   },
   "peerDependencies": {

@@ -112,18 +112,38 @@ function action(callback, ...params): EffectAction {
 ```ts
 type ValidEffectActions = EffectAction | EffectAction[]
 
-type EffectDispatcher<P, R> = <RR = R>(
-  payload: P,
-  handler?: (resolve$: Observable<R>) => Observable<RR>,
-) => Promise<RR>
+type EffectDispatcher<P> = (payload: P) => void
 
-function effect<P, R>(
+function effect<P>(
   self: AnyInstance,
   fn: (payload$: Observable<P>) => Observable<ValidEffectActions>,
-): EffectDispatcher<P, R>
+): EffectDispatcher<P>
 ```
 
 `payload$` emits data synchronously when the function returned by the effect is called. The returned `Observable<ValidEffectActions>` will automatically subscribed by `effect`
+
+### [👾](https://github.com/Runjuu/mst-effect/blob/main/src/effect/doll-effect.ts) dollEffect
+
+```ts
+type ValidEffectActions = EffectAction | EffectAction[]
+
+type DollEffectDispatcher<P, S> = <SS = S>(
+  payload: P,
+  handler?: (resolve$: Observable<S>) => Observable<SS>,
+) => Promise<SS>
+
+type SignalDispatcher<S> = (value: S) => void
+
+function dollEffect<P, S>(
+  self: AnyInstance,
+  fn: (
+    payload$: Observable<P>,
+    signalDispatcher: SignalDispatcher<S>,
+  ) => Observable<ValidEffectActions>,
+): DollEffectDispatcher<P, S>
+```
+
+`dollEffect` is almost identical with `effect`. The primary difference is `DollEffectDispatcher` will return a `Promise` which is useful when you want to report some message to the caller. The `Promise` will fulfill when `SignalDispatcher` being invoked ([example](https://codesandbox.io/s/report-fetch-status-to-caller-d6gmh)). Also, you can use the `handler` to control when and what the `Promise` should resolve ([example](https://codesandbox.io/s/report-fetch-status-to-caller-2-1eogq)).
 
 ### [👾](https://github.com/Runjuu/mst-effect/blob/main/src/signal/index.ts) signal
 

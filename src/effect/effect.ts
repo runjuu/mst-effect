@@ -21,14 +21,22 @@ export type EffectDispatchFunc<P, R> = IsEmptyPayload<P> extends true
       handler?: (result$: Observable<R>) => Observable<T>,
     ) => Promise<T | undefined>
 
+export function effect(self: AnyInstance, fn: Observable<ValidEffectActions>): void
 export function effect<P, R = unknown>(
   self: AnyInstance,
-  fn: EffectFactory<P, R> | Observable<ValidEffectActions>,
+  fn: EffectFactory<P, R>,
 ): EffectDispatchFunc<P, R>
-
 export function effect(
   self: AnyInstance,
   fn: EffectFactory<any, any> | Observable<ValidEffectActions>,
+): EffectDispatchFunc<any, any> | void {
+  return typeof fn === 'function' ? withDispatcher(self, fn) : withoutDispatcher(self, fn)
+}
+
+function withDispatcher<P, R>(self: AnyInstance, fn: EffectFactory<P, R>): EffectDispatchFunc<P, R>
+function withDispatcher(
+  self: AnyInstance,
+  fn: EffectFactory<any, any>,
 ): EffectDispatchFunc<any, any> {
   if (!self[EFFECT_ACTIONS_HANDLER]) {
     console.warn(
@@ -44,12 +52,7 @@ export function effect(
       ? fn(payloadSource.asObservable(), (value) => resultSource.next(value))
       : fn
 
-  const subscription = effect$
-    .pipe(
-      tap((actions) => self[EFFECT_ACTIONS_HANDLER]?.(actions)),
-      logAngIgnoreError(fn),
-    )
-    .subscribe()
+  const subscription = subscribe(self, fn, effect$)
 
   addDisposer(self, () => {
     payloadSource.complete()
@@ -69,6 +72,20 @@ export function effect(
 
     return promise
   }
+}
+
+function withoutDispatcher(self: AnyInstance, actions$: Observable<ValidEffectActions>): void {
+  const subscription = subscribe(self, null, actions$)
+  addDisposer(self, () => subscription.unsubscribe())
+}
+
+function subscribe(self: AnyInstance, factory: unknown, actions$: Observable<ValidEffectActions>) {
+  return actions$
+    .pipe(
+      tap((actions) => self[EFFECT_ACTIONS_HANDLER]?.(actions)),
+      logAngIgnoreError(factory),
+    )
+    .subscribe()
 }
 
 function logAngIgnoreError(factory: unknown) {

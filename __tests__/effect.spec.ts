@@ -116,7 +116,7 @@ describe('effect', () => {
     it(`should warning if 'types' is not imported from 'mst-effect'`, () => {
       const spy = jest.spyOn(console, 'warn').mockImplementation()
       const Model = mstTypes.model().actions((self) => ({
-        emit: effect(self, new Subject()),
+        emit: effect(self, (payload$) => payload$.pipe(map(() => NOOP))),
       }))
 
       Model.create()

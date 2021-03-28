@@ -143,7 +143,7 @@ function dollEffect<P, S>(
 ): DollEffectDispatcher<P, S>
 ```
 
-`dollEffect` is almost identical with `effect`. The primary difference is `DollEffectDispatcher` will return a `Promise` which is useful when you want to report some message to the caller. The `Promise` will fulfill when `SignalDispatcher` being invoked ([example](https://codesandbox.io/s/report-fetch-status-to-caller-d6gmh)). Also, you can use the `handler` to control when and what the `Promise` should resolve ([example](https://codesandbox.io/s/report-fetch-status-to-caller-2-1eogq)).
+`dollEffect` is almost identical with `effect`. The primary difference is `DollEffectDispatcher` will return a `Promise` which is useful when you want to report some message to the caller. The `Promise` will fulfill when `SignalDispatcher` being invoked ([example](https://codesandbox.io/s/report-fetch-status-to-caller-d6gmh?file=/src/app.tsx)). Also, you can use the `handler` to control when and what the `Promise` should resolve ([example](https://codesandbox.io/s/report-fetch-status-to-caller-2-1eogq?file=/src/app.tsx)).
 
 ### [👾](https://github.com/Runjuu/mst-effect/blob/main/src/signal/index.ts) signal
 

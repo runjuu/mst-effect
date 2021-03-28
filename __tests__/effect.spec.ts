@@ -1,5 +1,5 @@
-import { timer, Subject, Observable } from 'rxjs'
-import { map, startWith, endWith, switchMap, debounceTime } from 'rxjs/operators'
+import { from, timer, Subject, Observable } from 'rxjs'
+import { map, startWith, endWith, switchMap, debounceTime, scan, filter } from 'rxjs/operators'
 import { types as mstTypes } from 'mobx-state-tree'
 
 import { types, effect, action, destroy, NOOP, ValidEffectActions } from '../src'
@@ -107,7 +107,7 @@ describe('effect', () => {
         function invalidAction() {},
       ]
 
-      invalidActions.forEach(model.emit)
+      invalidActions.forEach((invalidAction) => model.emit(invalidAction))
       expect(spy.mock.calls.length).toBe(invalidActions.length)
       expect(spy.mock.calls).toMatchSnapshot()
       spy.mockRestore()
@@ -221,7 +221,7 @@ describe('effect', () => {
 
     it(`should resolve with undefined if did not trigger 'resolve' but the model was destroyed`, async () => {
       const Model = types.model().actions((self) => ({
-        sendMsg: effect<string, string>(self, (payload$) => payload$.pipe(map(() => NOOP))),
+        sendMsg: effect<string>(self, (payload$) => payload$.pipe(map(() => NOOP))),
       }))
 
       const model = Model.create()
@@ -229,6 +229,26 @@ describe('effect', () => {
 
       destroy(model)
       expect(await promise).toBeUndefined()
+    })
+
+    it(`should able to use RxJS to process the resolve value`, async () => {
+      const Model = types.model().actions((self) => ({
+        dispatch: effect<void, number>(self, (payload$, resolve) =>
+          payload$.pipe(
+            switchMap(() => from([1, 2, 3, 4]).pipe(map((num) => action(resolve, num)))),
+          ),
+        ),
+      }))
+
+      const model = Model.create()
+      const result = await model.dispatch(undefined, (result$) =>
+        result$.pipe(
+          scan((result, value) => [...result, `${value}`], Array.of<string>()),
+          filter((result) => result.length === 4),
+        ),
+      )
+
+      expect(result).toEqual(['1', '2', '3', '4'])
     })
 
     it(`should able to use 'endWith' to provide default value`, async () => {

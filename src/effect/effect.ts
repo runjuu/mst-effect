@@ -2,7 +2,7 @@ import { addDisposer } from 'mobx-state-tree'
 import { Observable, Subject } from 'rxjs'
 import { tap, catchError, take } from 'rxjs/operators'
 
-import type { PayloadFunc, AnyInstance } from '../types'
+import type { IsEmptyPayload, PayloadFunc, AnyInstance } from '../types'
 import type { ValidEffectActions } from './action'
 import { EFFECT_ACTIONS_HANDLER } from '../const'
 
@@ -11,15 +11,25 @@ export type EffectFactory<P, R = void> = (
   resolve: PayloadFunc<R, void>,
 ) => Observable<ValidEffectActions>
 
-export function effect<P, R = void>(
+export type EffectDispatchFunc<P, R> = IsEmptyPayload<P> extends true
+  ? <T = R>(
+      payload?: undefined,
+      handler?: (result$: Observable<R>) => Observable<T>,
+    ) => Promise<T | undefined>
+  : <T = R>(
+      payload: P,
+      handler?: (result$: Observable<R>) => Observable<T>,
+    ) => Promise<T | undefined>
+
+export function effect<P, R = unknown>(
   self: AnyInstance,
   fn: EffectFactory<P, R> | Observable<ValidEffectActions>,
-): PayloadFunc<P, Promise<R | undefined>>
+): EffectDispatchFunc<P, R>
 
 export function effect(
   self: AnyInstance,
   fn: EffectFactory<any, any> | Observable<ValidEffectActions>,
-): PayloadFunc<any, Promise<any>> {
+): EffectDispatchFunc<any, any> {
   if (!self[EFFECT_ACTIONS_HANDLER]) {
     console.warn(
       `[mst-effect]: Make sure the 'types' is imported from 'mst-effect' instead of 'mobx-state-tree'`,
@@ -47,9 +57,16 @@ export function effect(
     subscription.unsubscribe()
   })
 
-  return (payload) => {
-    const promise = resultSource.pipe(take(1)).toPromise()
+  return (payload: any, handler: any) => {
+    const promise = (typeof handler === 'function'
+      ? handler(resultSource.asObservable())
+      : resultSource
+    )
+      .pipe(take(1))
+      .toPromise()
+
     payloadSource.next(payload)
+
     return promise
   }
 }

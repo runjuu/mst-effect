@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`doll-effect action should warning if 'types' is not imported from 'mst-effect' 1`] = `
+Array [
+  Array [
+    "[mst-effect]: Make sure the 'types' is imported from 'mst-effect' instead of 'mobx-state-tree'",
+  ],
+]
+`;
+
+exports[`doll-effect action should warning if action invalid 1`] = `
+Array [
+  Array [
+    "[mst-effect]: string is not a valid EffectActions",
+  ],
+  Array [
+    "[mst-effect]: 123 is not a valid EffectActions",
+  ],
+  Array [
+    "[mst-effect]: true is not a valid EffectActions",
+  ],
+  Array [
+    "[mst-effect]: false is not a valid EffectActions",
+  ],
+  Array [
+    "[mst-effect]: undefined is not a valid EffectActions",
+  ],
+  Array [
+    "[mst-effect]: null is not a valid EffectActions",
+  ],
+  Array [
+    "[mst-effect]: Symbol(invalid action) is not a valid EffectActions",
+  ],
+  Array [
+    "[mst-effect]: [object Object] is not a valid EffectActions",
+  ],
+  Array [
+    "[mst-effect]: function invalidAction() { } is not a valid EffectActions",
+  ],
+]
+`;

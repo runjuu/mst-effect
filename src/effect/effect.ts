@@ -11,7 +11,7 @@ export type EffectFactory<P, R = void> = (
   resolve: PayloadFunc<R, void>,
 ) => Observable<ValidEffectActions>
 
-export type EffectDispatchFunc<P, R> = IsEmptyPayload<P> extends true
+export type EffectDispatcher<P, R> = IsEmptyPayload<P> extends true
   ? <T = R>(
       payload?: undefined,
       handler?: (result$: Observable<R>) => Observable<T>,
@@ -21,23 +21,11 @@ export type EffectDispatchFunc<P, R> = IsEmptyPayload<P> extends true
       handler?: (result$: Observable<R>) => Observable<T>,
     ) => Promise<T | undefined>
 
-export function effect(self: AnyInstance, fn: Observable<ValidEffectActions>): void
 export function effect<P, R = unknown>(
   self: AnyInstance,
   fn: EffectFactory<P, R>,
-): EffectDispatchFunc<P, R>
-export function effect(
-  self: AnyInstance,
-  fn: EffectFactory<any, any> | Observable<ValidEffectActions>,
-): EffectDispatchFunc<any, any> | void {
-  return typeof fn === 'function' ? withDispatcher(self, fn) : withoutDispatcher(self, fn)
-}
-
-function withDispatcher<P, R>(self: AnyInstance, fn: EffectFactory<P, R>): EffectDispatchFunc<P, R>
-function withDispatcher(
-  self: AnyInstance,
-  fn: EffectFactory<any, any>,
-): EffectDispatchFunc<any, any> {
+): EffectDispatcher<P, R>
+export function effect(self: AnyInstance, fn: EffectFactory<any, any>): EffectDispatcher<any, any> {
   if (!self[EFFECT_ACTIONS_HANDLER]) {
     console.warn(
       `[mst-effect]: Make sure the 'types' is imported from 'mst-effect' instead of 'mobx-state-tree'`,
@@ -72,11 +60,6 @@ function withDispatcher(
 
     return promise
   }
-}
-
-function withoutDispatcher(self: AnyInstance, actions$: Observable<ValidEffectActions>): void {
-  const subscription = subscribe(self, null, actions$)
-  addDisposer(self, () => subscription.unsubscribe())
 }
 
 function subscribe(self: AnyInstance, factory: unknown, actions$: Observable<ValidEffectActions>) {

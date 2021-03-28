@@ -1,4 +1,4 @@
-import { from, timer, Subject, Observable } from 'rxjs'
+import { from, timer, Observable } from 'rxjs'
 import { map, startWith, endWith, switchMap, debounceTime, scan, filter } from 'rxjs/operators'
 import { types as mstTypes } from 'mobx-state-tree'
 
@@ -295,24 +295,5 @@ describe('effect', () => {
 
     model.throwErr(false)
     expect(spy.mock.calls).toEqual([[]])
-  })
-
-  it(`should able to use Observable directly`, () => {
-    const subject = new Subject<ValidEffectActions>()
-    const spy = jest.fn()
-    const Model = types
-      .model({
-        value: types.string,
-      })
-      .actions((self) => {
-        effect(self, subject)
-        return {}
-      })
-
-    Model.create({ value: '' })
-
-    subject.next(action(spy, 123))
-
-    expect(spy.mock.calls).toEqual([[123]])
   })
 })

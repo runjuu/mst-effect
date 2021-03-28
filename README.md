@@ -108,28 +108,21 @@ function action(callback, ...params): EffectAction {
 
 `effect` is used to manage subscriptions automatically.
 
-##### When using a factory function
-
 ```ts
 type ValidEffectActions = EffectAction | EffectAction[]
+
+type EffectDispatcher<P, R> = <RR = R>(
+  payload: P,
+  handler?: (resolve$: Observable<R>) => Observable<RR>,
+) => Promise<RR>
 
 function effect<P, R>(
   self: AnyInstance,
   fn: (payload$: Observable<P>) => Observable<ValidEffectActions>,
-): <RR = R>(payload: P, handler?: (resolve$: Observable<R>) => Observable<RR>) => Promise<RR>
+): EffectDispatcher<P, R>
 ```
 
 `payload$` emits data synchronously when the function returned by the effect is called. The returned `Observable<ValidEffectActions>` will automatically subscribed by `effect`
-
-##### When using an observable
-
-```ts
-type ValidEffectActions = EffectAction | EffectAction[]
-
-function effect(self: AnyInstance, observable: Observable<ValidEffectActions>): void
-```
-
-`effect` also accepts an `Observable`, most of which behaves identity with `factory function`. The only difference is that it doesn't return a function.
 
 ### [👾](https://github.com/Runjuu/mst-effect/blob/main/src/signal/index.ts) signal
 

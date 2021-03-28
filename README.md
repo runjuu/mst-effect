@@ -24,7 +24,8 @@
 
 `mst-effect` is designed to be used with <a href="https://github.com/mobxjs/mobx-state-tree">MobX-State-Tree</a> to create asynchronous actions using <a href="https://github.com/ReactiveX/rxjs">RxJS</a>. In case you haven't used them before:
 
-> `MobX-State-Tree` is a full-featured reactive state management library that can **structure the state model** super intuitively.<br /> > `RxJS` is a library for composing asynchronous and event-based programs that provides the best practice to **manage async codes**.
+> `MobX-State-Tree` is a full-featured reactive state management library that can **structure the state model** super intuitively.
+> <br /> `RxJS` is a library for composing asynchronous and event-based programs that provides the best practice to **manage async codes**.
 
 If you are still hesitant about learning `RxJS`, check the examples below and play around with them. I assure you that you'll be amazed by what it can do and how clean the code could be.
 

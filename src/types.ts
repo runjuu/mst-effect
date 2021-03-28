@@ -2,7 +2,11 @@ import type { IAnyModelType, Instance } from 'mobx-state-tree'
 
 export type IsAny<T> = 0 extends 1 & T ? true : false // https://stackoverflow.com/questions/55541275/typescript-check-for-the-any-type
 
-export type IsEmptyPayload<P> = P extends void
+export type IsNever<T> = [T] extends [never] ? true : false
+
+export type IsEmptyPayload<P> = IsNever<P> extends true
+  ? false
+  : P extends void
   ? true
   : IsAny<P> extends true
   ? false

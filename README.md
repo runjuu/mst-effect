@@ -17,8 +17,8 @@
   <a href="https://coveralls.io/github/Runjuu/mst-effect?branch=main">
     <img src="https://img.shields.io/coveralls/github/Runjuu/mst-effect?colorA=373737&colorB=0A70E9&style=flat" alt="Coverage Status" />
   </a>
-  <a href="https://discord.gg/GguVg7JxNb">
-    <img src="https://img.shields.io/discord/822723953465360435?style=flat&colorA=373737&colorB=0A70E9&label=discord&logo=discord&logoColor=FFF" alt="Discord" />
+  <a href="https://github.com/Runjuu/mst-effect/discussions">
+    <img src="https://img.shields.io/static/v1?label=discuss%20on&message=github&colorA=373737&colorB=0A70E9&style=flat" alt="Github discussions" />
   </a>
 </p>
 

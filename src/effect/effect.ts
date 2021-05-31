@@ -1,11 +1,13 @@
 import { addDisposer } from 'mobx-state-tree'
 import { Observable, Subject } from 'rxjs'
 
-import type { PayloadFunc, AnyInstance } from '../types'
+import type { PayloadFunc, AnyInstance, NormalizeOptionalPayload } from '../types'
 import type { ValidEffectActions } from './action'
 import { subscribe } from './utils'
 
-export type EffectFactory<P> = (payload$: Observable<P>) => Observable<ValidEffectActions>
+export type EffectFactory<P> = (
+  payload$: Observable<NormalizeOptionalPayload<P>>,
+) => Observable<ValidEffectActions>
 
 export type EffectDispatcher<P> = PayloadFunc<P, void>
 

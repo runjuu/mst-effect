@@ -15,5 +15,5 @@ export function signal<P, R>(self: AnyInstance, fn?: SignalFactory<P, R>): Signa
 
   addDisposer(self, () => payloadSource.complete())
 
-  return [signal$, (payload) => payloadSource.next(payload)] as SignalResult<P, R>
+  return [signal$, (payload: P) => payloadSource.next(payload)] as SignalResult<P, R>
 }

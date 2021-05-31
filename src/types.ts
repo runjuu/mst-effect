@@ -14,8 +14,20 @@ export type IsEmptyPayload<P> = IsNever<P> extends true
   ? true
   : false
 
+export type IsOptionalPayload<Payload> = undefined extends Payload
+  ? true
+  : void extends Payload
+  ? true
+  : false
+
+export type NormalizeOptionalPayload<Payload> = IsOptionalPayload<Payload> extends true
+  ? Exclude<Payload, void> | undefined
+  : Payload
+
 export type PayloadFunc<Payload, ReturnType> = IsEmptyPayload<Payload> extends true
   ? () => ReturnType
+  : IsOptionalPayload<Payload> extends true
+  ? (payload?: NormalizeOptionalPayload<Payload>) => ReturnType
   : (payload: Payload) => ReturnType
 
 export type AnyInstance = Instance<IAnyModelType>

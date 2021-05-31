@@ -1,12 +1,12 @@
 {
   "name": "mst-effect",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Designed to be used with MobX-State-Tree to create asynchronous actions using RxJS.",
   "license": "MIT",
-  "author": "Runjuu",
-  "homepage": "https://github.com/Runjuu/mst-effect#readme",
   "repository": "github:Runjuu/mst-effect",
   "bugs": "https://github.com/Runjuu/mst-effect/issues",
+  "homepage": "https://github.com/Runjuu/mst-effect#readme",
+  "author": "Runjuu",
   "keywords": [
     "Rx",
     "RxJS",

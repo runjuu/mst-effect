@@ -41,9 +41,8 @@ export function dollEffect(
   })
 
   return (payload: any, handler: any) => {
-    const promise = (typeof handler === 'function'
-      ? handler(signalSource.asObservable())
-      : signalSource
+    const promise = (
+      typeof handler === 'function' ? handler(signalSource.asObservable()) : signalSource
     )
       .pipe(take(1))
       .toPromise()

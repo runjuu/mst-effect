@@ -3,18 +3,18 @@ import { Observable } from 'rxjs'
 
 export function reaction$<T>(
   expression: (r: IReactionPublic) => T,
-  opts: Omit<IReactionOptions, 'fireImmediately'> & { fireImmediately: true },
+  opts: IReactionOptions<T, true>,
 ): Observable<{ current: T; prev: T | undefined; r: IReactionPublic }>
 
 export function reaction$<T>(
   expression: (r: IReactionPublic) => T,
-  opts?: IReactionOptions,
+  opts?: IReactionOptions<T, false>,
 ): Observable<{ current: T; prev: T; r: IReactionPublic }>
 
-export function reaction$<T>(
+export function reaction$<T, FireImmediately extends boolean = false>(
   expression: (r: IReactionPublic) => T,
-  opts?: IReactionOptions,
-): Observable<{ current: T; prev: T; r: IReactionPublic }> {
+  opts?: IReactionOptions<T, FireImmediately>,
+): Observable<{ current: T; prev?: T; r: IReactionPublic }> {
   return new Observable((observer) => {
     const dispose = reaction(
       expression,
